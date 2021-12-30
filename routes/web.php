@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,6 @@ Route::get('login',[AuthController::class, 'login'])->name('login');
 Route::get('register',[AuthController::class, 'register'])->name('register');
 Route::post('login/submit',[AuthController::class, 'submitLogin'])->name('submit.login');
 Route::post('register/submit',[AuthController::class, 'submitRegister'])->name('submit.register');
+
+Route::get('home',[HomeController::class, 'home'])->name('home');
 Route::get('password-reset',[AuthController::class, 'login'])->name('password.request');
