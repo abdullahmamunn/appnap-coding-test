@@ -4,8 +4,11 @@
    <div class="row d-flex justify-content-center mt-5">
        <div class="col-md-6">
         <div class="card">
-            <div class="card-header">Signup</div>
+          <div class="card-header">Signup</div>
             <div class="card-body">
+                @if(session('message'))
+                    <div class="alert-{{ session('key') }}">{{ session('message') }}</div>
+                @endif
                 <form method="POST" action="{{ route('submit.register') }}" aria-label="{{ __('Register') }}">
                     @csrf
 

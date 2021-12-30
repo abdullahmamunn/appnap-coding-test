@@ -29,16 +29,32 @@ class AuthController extends Controller
                 'password' => 'required|confirmed|min:6'
         ]);
 
+        $data = [
+            'full_name' => $request->full_name,
+            'user_name' => $request->user_name,
+            'email' => $request->email,
+            'dob' => $request->dob,
+            'password' => bcrypt($request->password),
+        ];
         try {
             //user create
-            User::create($request->all());
-            return redirect()->route('home');
+            User::create($data);
+            session()->flash('message','User created!');
+            session()->flash('key','success');
+            return redirect()->back();
         } catch (Exception $e) {
             return redirect()->back();
         }
     }
     public function submitLogin(Request $request)
     {
-        return $request->all();
+         // check validation
+         $request->validate([
+            'user_name' => 'required|user_name',
+            'password' => 'required'
+       ]);
+
+       $cred = $request->except(['_token']);
+
     }
 }
