@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,13 @@ Route::post('login/submit',[AuthController::class, 'submitLogin'])->name('submit
 Route::post('register/submit',[AuthController::class, 'submitRegister'])->name('submit.register');
 Route::get('varify/email/{token}',[AuthController::class,'emailVarify'])->name('email.verify');
 
-Route::get('home',[HomeController::class, 'home'])->name('home');
+
 Route::get('password-reset',[AuthController::class, 'forgotPassword'])->name('password.request');
 Route::post('password-reset',[AuthController::class, 'passwordReset'])->name('password.reset');
 Route::get('password-confirm',[AuthController::class, 'passwordConfirm'])->name('confirm.password');
 Route::post('password-confirm',[AuthController::class, 'passwordSubmit'])->name('password.confirm');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('home',[HomeController::class, 'home'])->name('home');
+    Route::get('logout',[AuthController::class, 'logout'])->name('admin.logout');
+});

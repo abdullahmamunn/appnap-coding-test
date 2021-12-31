@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\CssSelector\Node\FunctionNode;
@@ -46,7 +47,7 @@ class AuthController extends Controller
             //user create
             User::create($data);
             Mail::to($data['email'])->send(new EmailVarification($data));
-            session()->flash('message','User created!');
+            session()->flash('message','User created!Please check your Email to verify account');
             session()->flash('key','success');
             return redirect()->back();
         } catch (Exception $e) {
@@ -77,6 +78,11 @@ class AuthController extends Controller
                return redirect()->route('home');
 
             }
+
+            session()->flash('message','Sorry! your username or password is incorrect');
+            session()->flash('key','warning');
+            return redirect()->back();
+            
        } catch (Exception $e) {
             session()->flash('message', $e->getMessage());
             session()->flash('key','warning');
@@ -146,7 +152,8 @@ class AuthController extends Controller
             return redirect()->back();
         }
        
-        return redirect()->route('confirm.password');
+       
+        return view('auth.password-confirm',compact('user'));
         
     }
     public function passwordConfirm()
@@ -156,9 +163,32 @@ class AuthController extends Controller
 
     public function passwordSubmit(Request $request)
     {
+        // return $request->all();
         // check validation 
         $request->validate([
-           'password' => 'required|confirmed|min:6'
-        ]);
+            'password' => 'required|confirmed|min:6'
+         ]);
+
+         $data = [
+             'password' => bcrypt($request->password)
+         ];
+
+        $user = User::where('user_name',$request->user_name)->first();
+        if($user){
+            if($user->email === $request->email)
+            {
+               $user->update($data);
+               session()->flash('message', 'Congratulations! new password set successfully!');
+               session()->flash('key','success');
+               return redirect()->back();
+            }
+        }
+        
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return redirect()->route('login');
     }
 }

@@ -13,6 +13,20 @@
                     @csrf
 
                     <div class="form-group row">
+                        <label for="" class="col-sm-3 col-form-label text-md-right">{{ __('User Name') }}</label>
+
+                        <div class="col-md-8 mt-3">
+                            <input id="" type="text" class="form-control{{ $errors->has('user_name') ? ' is-invalid' : '' }}" name="user_name" value="{{ $user->user_name }}" readonly>
+                            <input id="" type="hidden" class="form-control{{ $errors->has('user_name') ? ' is-invalid' : '' }}" name="email" value="{{ $user->email }}" readonly>
+
+                            @if ($errors->has('password'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="password" class="col-sm-3 col-form-label text-md-right">{{ __('Password') }}</label>
 
                         <div class="col-md-8 mt-3">
