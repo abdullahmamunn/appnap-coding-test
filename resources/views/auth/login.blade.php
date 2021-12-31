@@ -6,13 +6,16 @@
         <div class="card">
             <div class="card-header">Signin</div>
             <div class="card-body">
+            @if(session('message'))
+                <div class="alert-{{ session('key') }}">{{ session('message') }}</div>
+            @endif
                 <form method="POST" action="{{ route('submit.login') }}" aria-label="{{ __('Login') }}">
                     @csrf
                     <div class="form-group row">
                         <label for="email" class="col-sm-3 col-form-label text-md-right">{{ __('User Name') }}</label>
 
                         <div class="col-md-6">
-                            <input id="email" type="text" class="form-control{{ $errors->has('user_name') ? ' is-invalid' : '' }}" name="user_name" value="{{ old('user_name') }}">
+                            <input id="" type="text" class="form-control{{ $errors->has('user_name') ? ' is-invalid' : '' }}" name="user_name" value="{{ old('user_name') }}">
 
                             @if ($errors->has('user_name'))
                                 <span class="invalid-feedback" role="alert">

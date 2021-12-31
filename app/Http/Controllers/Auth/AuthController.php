@@ -57,6 +57,7 @@ class AuthController extends Controller
     }
     public function submitLogin(Request $request)
     {
+        // return $request->all();
          // check validation
          $request->validate([
             'user_name' => 'required',
@@ -65,8 +66,18 @@ class AuthController extends Controller
        
        try {
             $cred = $request->except(['_token']);
-            dd($cred);
-       } catch (Exception $t) {
+            if(auth()->attempt($cred)){
+                
+               if(auth()->user()->email_varified === 0)
+               {
+                    session()->flash('message','Your account is not active! please active your account first to Signin');
+                    session()->flash('key','warning');
+                    return redirect()->back();
+               }
+               return redirect()->route('home');
+
+            }
+       } catch (Exception $e) {
             session()->flash('message', $e->getMessage());
             session()->flash('key','warning');
             return redirect()->back();
@@ -85,7 +96,7 @@ class AuthController extends Controller
             return redirect()->route('register');
         }
         $user = User::where('email_varified_token',$token)->first();
-
+        //dd($user);
         if($user === null)
         {
             session()->flash('message','Invalid Token');
@@ -97,11 +108,12 @@ class AuthController extends Controller
         //update the email_varified and email_varifed_at
         // and set null email_verified_token
        try {
-           User::updated([
+          $data = $user->update([
                'email_varified' =>1,
                'email_verified_at' => Carbon::now(),
-               'email_verified_token' => ''
+               'email_varified_token' => ''
             ]);
+            
             session()->flash('message', 'Now Your account is activated! you can SignIn');
             session()->flash('key','success');
             return redirect()->back();
