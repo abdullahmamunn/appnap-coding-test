@@ -25,4 +25,7 @@ Route::post('register/submit',[AuthController::class, 'submitRegister'])->name('
 Route::get('varify/email/{token}',[AuthController::class,'emailVarify'])->name('email.verify');
 
 Route::get('home',[HomeController::class, 'home'])->name('home');
-Route::get('password-reset',[AuthController::class, 'login'])->name('password.request');
+Route::get('password-reset',[AuthController::class, 'forgotPassword'])->name('password.request');
+Route::post('password-reset',[AuthController::class, 'passwordReset'])->name('password.reset');
+Route::get('password-confirm',[AuthController::class, 'passwordConfirm'])->name('confirm.password');
+Route::post('password-confirm',[AuthController::class, 'passwordSubmit'])->name('password.confirm');

@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-
+use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class AuthController extends Controller
 {
@@ -123,5 +123,42 @@ class AuthController extends Controller
             session()->flash('key','warning');
             return redirect()->back();
        }
+    }
+
+    public function forgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+    public function passwordReset(Request $request)
+    {
+        //check validation
+        $request->validate([
+            'user_name' => 'required'
+        ]);
+        $user = User::where('user_name',$request->user_name)->first();
+       
+
+        // match username and email
+       
+        if($user === null){
+            session()->flash('message', 'Your user name is not corrct!');
+            session()->flash('key','warning');
+            return redirect()->back();
+        }
+       
+        return redirect()->route('confirm.password');
+        
+    }
+    public function passwordConfirm()
+    {
+        return view('auth.password-confirm');
+    }
+
+    public function passwordSubmit(Request $request)
+    {
+        // check validation 
+        $request->validate([
+           'password' => 'required|confirmed|min:6'
+        ]);
     }
 }
