@@ -22,6 +22,7 @@ Route::get('login',[AuthController::class, 'login'])->name('login');
 Route::get('register',[AuthController::class, 'register'])->name('register');
 Route::post('login/submit',[AuthController::class, 'submitLogin'])->name('submit.login');
 Route::post('register/submit',[AuthController::class, 'submitRegister'])->name('submit.register');
+Route::get('varify/email/{token}',[AuthController::class,'emailVarify'])->name('email.verify');
 
 Route::get('home',[HomeController::class, 'home'])->name('home');
 Route::get('password-reset',[AuthController::class, 'login'])->name('password.request');

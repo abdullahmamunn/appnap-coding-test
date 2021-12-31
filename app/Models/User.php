@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'dob',
         'password',
+        'email_varified',
+        'email_varified_at',
+        'email_varified_token'
     ];
 
     /**
