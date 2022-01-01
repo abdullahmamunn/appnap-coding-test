@@ -30,6 +30,7 @@ class AuthController extends Controller
         $request->validate([
                 'full_name' => 'required',
                 'email' => 'required|email|unique:users,email',
+                'phone_number' => 'required',
                 'user_name' => 'required|unique:users,user_name',
                 'dob' => 'required',
                 'password' => 'required|confirmed|min:6'
@@ -50,6 +51,7 @@ class AuthController extends Controller
                 'full_name' => $request->full_name,
                 'user_name' => $request->user_name,
                 'email' => $request->email,
+                'phone_number' => $request->phone_number,
                 'dob' => $request->dob,
                 'password' => bcrypt($request->password),
                 'email_varified_token' => Str::random(32)
@@ -60,7 +62,7 @@ class AuthController extends Controller
             // using Notification Mail
             $user->notify(new verifyEmail($user));
 
-            
+
             session()->flash('message','User created!Please check your Email to verify account');
             session()->flash('key','success');
             return redirect()->back();

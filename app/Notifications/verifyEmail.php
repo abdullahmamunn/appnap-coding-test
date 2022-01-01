@@ -31,7 +31,7 @@ class verifyEmail extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','nexmo'];
     }
 
     /**
@@ -47,6 +47,18 @@ class verifyEmail extends Notification implements ShouldQueue
             ->line('The introduction to the notification.')
             ->action('Click to Verify Email', route('email.verify', $this->data->email_varified_token))
             ->line('Thank you for using our application!');
+    }
+
+    /**
+     * Get the Vonage / SMS representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\NexmoMessage
+     */
+    public function toNexmo($notifiable)
+    {
+        return (new NexmoMessage)
+                ->content('Your SMS message content');
     }
 
     /**

@@ -39,6 +39,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="email" class="col-sm-3 col-form-label text-md-right">{{ __('Phone Number') }}</label>
+
+                        <div class="col-md-8 mt-3">
+                            <input id="email" type="number" class="form-control{{ $errors->has('phone_number') ? ' is-invalid' : '' }}" name="phone_number" value="{{ old('phone_number') }}">
+
+                            @if ($errors->has('phone_number'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('phone_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="" class="col-sm-3 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
 
                         <div class="col-md-8 mt-3">

@@ -25,7 +25,8 @@ class User extends Authenticatable
         'password',
         'email_varified',
         'email_varified_at',
-        'email_varified_token'
+        'email_varified_token',
+        'phone_number'
     ];
 
     /**
