@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\EmailVarification;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Notifications\verifyEmail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Hash;
@@ -34,27 +35,36 @@ class AuthController extends Controller
                 'password' => 'required|confirmed|min:6'
         ]);
 
-        $data = [
-            'full_name' => $request->full_name,
-            'user_name' => $request->user_name,
-            'email' => $request->email,
-            'dob' => $request->dob,
-            'password' => bcrypt($request->password),
-            'email_varified_token' => Str::random(32)
-        ];
+        // $data = [
+        //     'full_name' => $request->full_name,
+        //     'user_name' => $request->user_name,
+        //     'email' => $request->email,
+        //     'dob' => $request->dob,
+        //     'password' => bcrypt($request->password),
+        //     'email_varified_token' => Str::random(32)
+        // ];
      
-        try {
+        
             //user create
-            User::create($data);
-            Mail::to($data['email'])->send(new EmailVarification($data));
+            $user = User::create([
+                'full_name' => $request->full_name,
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'dob' => $request->dob,
+                'password' => bcrypt($request->password),
+                'email_varified_token' => Str::random(32)
+            ]);
+            // using Mail
+            // Mail::to($data['email'])->queue(new EmailVarification($data));
+
+            // using Notification Mail
+            $user->notify(new verifyEmail($user));
+
+            
             session()->flash('message','User created!Please check your Email to verify account');
             session()->flash('key','success');
             return redirect()->back();
-        } catch (Exception $e) {
-            session()->flash('message', $e->getMessage());
-            session()->flash('key','warning');
-            return redirect()->back();
-        }
+      
     }
     public function submitLogin(Request $request)
     {
